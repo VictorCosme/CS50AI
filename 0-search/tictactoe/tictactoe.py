@@ -23,19 +23,19 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
-
+    if not terminal(board):
     # 1. Conte a quantidade de símbolos no tabuleiro
-    qt = 0
-    for i in range(3):
-        for j in range(3):
-            if board[i][j] != EMPTY:
-                qt += 1
+        qt = 0
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] != EMPTY:
+                    qt += 1
 
-    # 2. Retorne X se a quantidade for par. Caso contrário, retorne O
-    if qt % 2 == 0: 
-        return X
-    else: 
-        return O
+        # 2. Retorne X se a quantidade for par. Caso contrário, retorne O
+        if qt % 2 == 0: 
+            return X
+        else: 
+            return O
     
     
 def actions(board):
@@ -130,7 +130,29 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplemented
+    jogador = player(board)
+    acoes = actions(board)
+
+    aux = {}
+    
+    if jogador == X:
+        for action in acoes:
+            newBoard = result(board, action)
+            v = min_value(newBoard)
+            aux[v] = action
+    
+        key = max(list(aux.keys()))
+        return aux[key]
+
+    elif jogador == O:
+        for action in acoes:
+            newBoard = result(board, action)
+            v = max_value(newBoard)
+            aux[v] = action
+        
+        key = min(list(aux.keys())) 
+        return aux[key]
+
 
 def max_value(board):
     if terminal(board):
